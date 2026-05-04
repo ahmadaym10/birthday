@@ -2313,6 +2313,16 @@ body::before {
 ═══════════════════════════════════════════════ -->
 <div id="main-content">
 
+  <section class="opening-lyrics" aria-label="lyrics opening">
+    <div class="opening-lyrics-card">
+      <span class="opening-lyrics-badge">✦ Lyrics ✦</span>
+      <h2 class="opening-lyrics-title">من أول الصفحة... كلام الأغنية ✨</h2>
+      <p class="opening-lyrics-line">I found a love for me</p>
+      <p class="opening-lyrics-line">Darling, just dive right in</p>
+      <p class="opening-lyrics-line">And follow my lead</p>
+    </div>
+  </section>
+
   <!-- ─── HERO ────────────────────────────────── -->
   <section class="hero" id="hero">
 
@@ -2963,14 +2973,6 @@ body::before {
 
 </div><!-- /main-content -->
 
-<!-- ═══════════════════════════════════════════════
-     AUDIO ELEMENT (hidden)
-═══════════════════════════════════════════════ -->
-<audio id="bg-audio" loop preload="none">
-  <!-- Romantic slow piano — multiple fallbacks -->
-  <source src="https://cdn.pixabay.com/audio/2024/03/12/audio_d46e0f6527.mp3" type="audio/mpeg">
-  <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_b5db2ecced.mp3" type="audio/mpeg">
-</audio>
 
 <!-- ═══════════════════════════════════════════════
      JAVASCRIPT
@@ -3326,9 +3328,19 @@ function spawnLockPetals() {
 spawnLockPetals();
 
 /* ─── UNLOCK GATE ─────────────────────────────────────────── */
+const LOCK_ENABLED = false;
 const VALID_KEYS = ['2013/10/3','2013/10/03','2013-10-3','2013-10-03','3/10/2013','03102013','20131003'];
 
 function unlockGate() {
+  if (!LOCK_ENABLED) {
+    document.getElementById('lock-screen').classList.add('hide');
+    document.getElementById('lock-screen').style.display = 'none';
+    initFinalMasterBlock?.();
+    initRipples?.();
+    initSongHighlighter?.();
+    polishAudioButton?.();
+    return;
+  }
   const val   = document.getElementById('pass-key').value.trim();
   const errEl = document.getElementById('lock-error');
 
@@ -3544,7 +3556,7 @@ function scrollToSection(id) {
 
 /* ─── AUDIO ──────────────────────────────────────────────── */
 let audioReady = false;
-const audioEl  = document.getElementById('bg-audio');
+const audioEl  = document.getElementById('real-audio') || document.getElementById('bg-audio');
 
 function autoPlayAudio() {
   /* Try multiple romantic piano sources */
@@ -4714,7 +4726,7 @@ function secretReveal(card) {
 /* ─── MUSIC NOTES ON AUDIO ────────────────────────────────── */
 function spawnMusicNote() {
   if (!document.getElementById('audio-btn')?.classList.contains('visible')) return;
-  if (document.getElementById('bg-audio')?.paused) return;
+  if ((document.getElementById('real-audio') || document.getElementById('bg-audio'))?.paused) return;
   const note = document.createElement('div');
   note.className  = 'music-note-float';
   const notes     = ['♩','♪','♫','♬','♭'];
@@ -5195,10 +5207,10 @@ setTimeout(paintBgEnhanced, 100);
 /* ─── AUDIO VISUALIZER (canvas overlay) ──────────────────── */
 let analyser, audioCtx, dataArr, vizActive = false;
 function initAudioViz() {
-  if (vizActive || !document.getElementById('bg-audio')) return;
+  if (vizActive || !(document.getElementById('real-audio') || document.getElementById('bg-audio'))) return;
   try {
     audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
-    const src  = audioCtx.createMediaElementSource(document.getElementById('bg-audio'));
+    const src  = audioCtx.createMediaElementSource(document.getElementById('real-audio') || document.getElementById('bg-audio'));
     analyser   = audioCtx.createAnalyser();
     analyser.fftSize = 64;
     src.connect(analyser);
@@ -12122,9 +12134,9 @@ console.log('%c✦ Sandos Royal — Premium Mobile Build ✦', 'color:#d4899f;fo
      Romantic song · Micro-animations · Premium details
 ████████████████████████████████████████████████████████████ -->
 
-<!-- ══ REAL ROMANTIC SONG (Ed Sheeran - Perfect) ══ -->
+<!-- ══ BACKGROUND AUDIO TRACK ══ -->
 <audio id="real-audio" loop preload="none" crossorigin="anonymous">
-  <!-- Perfect — Ed Sheeran (royalty-free proxy streams) -->
+  <!-- Background audio track sources -->
   <source src="https://cdn.pixabay.com/audio/2024/07/01/audio_c8190e4c0f.mp3" type="audio/mpeg">
   <source src="https://cdn.pixabay.com/audio/2023/11/13/audio_f9b9b0b5c0.mp3" type="audio/mpeg">
   <source src="https://cdn.pixabay.com/audio/2022/11/22/audio_febc508520.mp3" type="audio/mpeg">
@@ -12447,6 +12459,24 @@ console.log('%c✦ Sandos Royal — Premium Mobile Build ✦', 'color:#d4899f;fo
   }
 }
 
+/* ── Opening lyrics block ── */
+.opening-lyrics {
+  max-width: 900px;
+  margin: 2.2rem auto 0;
+  padding: 0 1rem;
+}
+.opening-lyrics-card {
+  background: linear-gradient(135deg, rgba(32,14,24,0.92), rgba(18,9,16,0.95));
+  border: 1px solid rgba(228,190,128,0.2);
+  border-radius: 24px;
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+}
+.opening-lyrics-badge { color: var(--gold-bright); letter-spacing: 2px; font-size: .75rem; }
+.opening-lyrics-title { margin: .5rem 0 .8rem; color: var(--rose-pearl); font-size: 1.1rem; }
+.opening-lyrics-line { color: rgba(237,208,218,0.92); line-height: 1.9; }
+
 /* ════════════════════════════════════════════════════════════════
    ✦ NEW SECTION: SONG LYRICS DISPLAY  — كلام الأغنية
 ════════════════════════════════════════════════════════════════ */
@@ -12485,6 +12515,25 @@ console.log('%c✦ Sandos Royal — Premium Mobile Build ✦', 'color:#d4899f;fo
 @media (max-width: 480px) {
   .song-card { padding: 2rem 1.4rem; border-radius: 24px; }
 }
+.song-embed-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 42px rgba(0,0,0,0.45);
+  position: relative;
+  z-index: 1;
+}
+.song-embed-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 .song-now-playing {
   display: inline-flex;
   align-items: center;
@@ -13190,8 +13239,8 @@ button, [role="button"] { cursor: pointer; }
         <div class="mp-art-vinyl"></div>
       </div>
       <div class="mp-info">
-        <span class="mp-song">Perfect</span>
-        <span class="mp-artist">Ed Sheeran &nbsp;·&nbsp; for Sondos ✦</span>
+        <span class="mp-song">YouTube Song</span>
+        <span class="mp-artist">Requested Track &nbsp;·&nbsp; for Sondos ✦</span>
         <div class="mp-progress-wrap" id="mp-prog-wrap">
           <div class="mp-progress-track">
             <div class="mp-progress-fill" id="mp-prog-fill"></div>
@@ -13315,45 +13364,15 @@ button, [role="button"] { cursor: pointer; }
 <div class="song-section mv-obs">
   <div class="p-chap">
     <span class="p-chap-label">✦ أغنية هديتها ليكِ ✦</span>
-    <span class="p-chap-title">Perfect — Ed Sheeran</span>
-    <span class="p-chap-sub">الأغنية دي من أجملهم — وبتقول كل حاجة بقولهالك</span>
+    <span class="p-chap-title">الأغنية الجديدة</span>
+    <span class="p-chap-sub">شغّلتلك الأغنية اللي طلبتيها 🤍</span>
   </div>
   <div class="song-card mv-obs">
-    <div class="song-now-playing">
-      <div class="song-playing-dots">
-        <div class="song-playing-dot"></div>
-        <div class="song-playing-dot"></div>
-        <div class="song-playing-dot"></div>
-        <div class="song-playing-dot"></div>
-      </div>
-      بتشغل دلوقتي
-    </div>
-    <span class="song-title">Perfect</span>
-    <span class="song-artist">Ed Sheeran</span>
-    <div class="song-divider"></div>
-    <div class="song-lyrics" id="song-lyrics-wrap">
-      <span class="song-lyric-line">I found a love for me</span>
-      <span class="song-lyric-line">Darling, just dive right in</span>
-      <span class="song-lyric-line">And follow my lead</span>
-      <span class="song-lyric-break"></span>
-      <span class="song-lyric-line">Well, I found a girl, beautiful and sweet</span>
-      <span class="song-lyric-line highlight">I never knew you were the someone</span>
-      <span class="song-lyric-line highlight">Waiting for me</span>
-      <span class="song-lyric-break"></span>
-      <span class="song-lyric-line">Baby, I'm dancing in the dark</span>
-      <span class="song-lyric-line">With you between my arms</span>
-      <span class="song-lyric-line highlight">Barefoot on the grass</span>
-      <span class="song-lyric-line highlight">Listening to our favourite song</span>
-      <span class="song-lyric-break"></span>
-      <span class="song-lyric-line">When you said you looked a mess</span>
-      <span class="song-lyric-line">I whispered underneath my breath</span>
-      <span class="song-lyric-line highlight">But you heard it — darling, you look perfect tonight</span>
-    </div>
     <div class="song-message">
-      <p class="song-message-text">
-        الأغنية دي بتقول "أنتِ مثالية" — وده بالظبط <em>اللي بحسه لما بفكر فيكِ.</em>
-        مش لأنك كاملة — بس لأنك <em>أنتِ</em> وده كفاية وزيادة.
-      </p>
+      <p class="song-message-text">نسخة YouTube المضافة بدل الأغنية القديمة:</p>
+    </div>
+    <div class="song-embed-wrap">
+      <iframe src="https://www.youtube.com/embed/47X9Tf92Ucs?si=Iqx2G0IiXSCFXG9T" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
   </div>
 </div>
@@ -13573,11 +13592,12 @@ button, [role="button"] { cursor: pointer; }
   ══════════════════════════════════════════════ */
   function initSongHighlighter() {
     const lines = document.querySelectorAll('.song-lyric-line:not(.highlight)');
+    if (!lines.length) return;
     let idx = 0;
     setInterval(() => {
       lines.forEach(l => l.style.color = '');
       if (lines[idx]) {
-        lines[idx].style.color    = 'rgba(237,208,218,0.92)';
+        lines[idx].style.color      = 'rgba(237,208,218,0.92)';
         lines[idx].style.transition = 'color 0.8s ease';
       }
       idx = (idx + 1) % lines.length;
@@ -13629,4 +13649,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true });
   }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!LOCK_ENABLED) {
+    document.getElementById('lock-screen')?.classList.add('hide');
+    document.getElementById('lock-screen')?.style && (document.getElementById('lock-screen').style.display = 'none');
+  }
+});
+
 </script>
