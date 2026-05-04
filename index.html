@@ -12122,9 +12122,9 @@ console.log('%c✦ Sandos Royal — Premium Mobile Build ✦', 'color:#d4899f;fo
      Romantic song · Micro-animations · Premium details
 ████████████████████████████████████████████████████████████ -->
 
-<!-- ══ REAL ROMANTIC SONG (Ed Sheeran - Perfect) ══ -->
+<!-- ══ BACKGROUND AUDIO TRACK ══ -->
 <audio id="real-audio" loop preload="none" crossorigin="anonymous">
-  <!-- Perfect — Ed Sheeran (royalty-free proxy streams) -->
+  <!-- Background audio track sources -->
   <source src="https://cdn.pixabay.com/audio/2024/07/01/audio_c8190e4c0f.mp3" type="audio/mpeg">
   <source src="https://cdn.pixabay.com/audio/2023/11/13/audio_f9b9b0b5c0.mp3" type="audio/mpeg">
   <source src="https://cdn.pixabay.com/audio/2022/11/22/audio_febc508520.mp3" type="audio/mpeg">
@@ -13209,8 +13209,8 @@ button, [role="button"] { cursor: pointer; }
         <div class="mp-art-vinyl"></div>
       </div>
       <div class="mp-info">
-        <span class="mp-song">Perfect</span>
-        <span class="mp-artist">Ed Sheeran &nbsp;·&nbsp; for Sondos ✦</span>
+        <span class="mp-song">YouTube Song</span>
+        <span class="mp-artist">Requested Track &nbsp;·&nbsp; for Sondos ✦</span>
         <div class="mp-progress-wrap" id="mp-prog-wrap">
           <div class="mp-progress-track">
             <div class="mp-progress-fill" id="mp-prog-fill"></div>
@@ -13562,11 +13562,12 @@ button, [role="button"] { cursor: pointer; }
   ══════════════════════════════════════════════ */
   function initSongHighlighter() {
     const lines = document.querySelectorAll('.song-lyric-line:not(.highlight)');
+    if (!lines.length) return;
     let idx = 0;
     setInterval(() => {
       lines.forEach(l => l.style.color = '');
       if (lines[idx]) {
-        lines[idx].style.color    = 'rgba(237,208,218,0.92)';
+        lines[idx].style.color      = 'rgba(237,208,218,0.92)';
         lines[idx].style.transition = 'color 0.8s ease';
       }
       idx = (idx + 1) % lines.length;
