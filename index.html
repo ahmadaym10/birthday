@@ -3326,9 +3326,19 @@ function spawnLockPetals() {
 spawnLockPetals();
 
 /* ─── UNLOCK GATE ─────────────────────────────────────────── */
+const LOCK_ENABLED = false;
 const VALID_KEYS = ['2013/10/3','2013/10/03','2013-10-3','2013-10-03','3/10/2013','03102013','20131003'];
 
 function unlockGate() {
+  if (!LOCK_ENABLED) {
+    document.getElementById('lock-screen').classList.add('hide');
+    document.getElementById('lock-screen').style.display = 'none';
+    initFinalMasterBlock?.();
+    initRipples?.();
+    initSongHighlighter?.();
+    polishAudioButton?.();
+    return;
+  }
   const val   = document.getElementById('pass-key').value.trim();
   const errEl = document.getElementById('lock-error');
 
@@ -13619,4 +13629,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true });
   }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!LOCK_ENABLED) {
+    document.getElementById('lock-screen')?.classList.add('hide');
+    document.getElementById('lock-screen')?.style && (document.getElementById('lock-screen').style.display = 'none');
+  }
+});
+
 </script>
