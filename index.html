@@ -2313,6 +2313,16 @@ body::before {
 ═══════════════════════════════════════════════ -->
 <div id="main-content">
 
+  <section class="opening-lyrics" aria-label="lyrics opening">
+    <div class="opening-lyrics-card">
+      <span class="opening-lyrics-badge">✦ Lyrics ✦</span>
+      <h2 class="opening-lyrics-title">من أول الصفحة... كلام الأغنية ✨</h2>
+      <p class="opening-lyrics-line">I found a love for me</p>
+      <p class="opening-lyrics-line">Darling, just dive right in</p>
+      <p class="opening-lyrics-line">And follow my lead</p>
+    </div>
+  </section>
+
   <!-- ─── HERO ────────────────────────────────── -->
   <section class="hero" id="hero">
 
@@ -2963,14 +2973,6 @@ body::before {
 
 </div><!-- /main-content -->
 
-<!-- ═══════════════════════════════════════════════
-     AUDIO ELEMENT (hidden)
-═══════════════════════════════════════════════ -->
-<audio id="bg-audio" loop preload="none">
-  <!-- Romantic slow piano — multiple fallbacks -->
-  <source src="https://cdn.pixabay.com/audio/2024/03/12/audio_d46e0f6527.mp3" type="audio/mpeg">
-  <source src="https://cdn.pixabay.com/audio/2022/10/16/audio_b5db2ecced.mp3" type="audio/mpeg">
-</audio>
 
 <!-- ═══════════════════════════════════════════════
      JAVASCRIPT
@@ -3554,7 +3556,7 @@ function scrollToSection(id) {
 
 /* ─── AUDIO ──────────────────────────────────────────────── */
 let audioReady = false;
-const audioEl  = document.getElementById('bg-audio');
+const audioEl  = document.getElementById('real-audio') || document.getElementById('bg-audio');
 
 function autoPlayAudio() {
   /* Try multiple romantic piano sources */
@@ -4724,7 +4726,7 @@ function secretReveal(card) {
 /* ─── MUSIC NOTES ON AUDIO ────────────────────────────────── */
 function spawnMusicNote() {
   if (!document.getElementById('audio-btn')?.classList.contains('visible')) return;
-  if (document.getElementById('bg-audio')?.paused) return;
+  if ((document.getElementById('real-audio') || document.getElementById('bg-audio'))?.paused) return;
   const note = document.createElement('div');
   note.className  = 'music-note-float';
   const notes     = ['♩','♪','♫','♬','♭'];
@@ -5205,10 +5207,10 @@ setTimeout(paintBgEnhanced, 100);
 /* ─── AUDIO VISUALIZER (canvas overlay) ──────────────────── */
 let analyser, audioCtx, dataArr, vizActive = false;
 function initAudioViz() {
-  if (vizActive || !document.getElementById('bg-audio')) return;
+  if (vizActive || !(document.getElementById('real-audio') || document.getElementById('bg-audio'))) return;
   try {
     audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
-    const src  = audioCtx.createMediaElementSource(document.getElementById('bg-audio'));
+    const src  = audioCtx.createMediaElementSource(document.getElementById('real-audio') || document.getElementById('bg-audio'));
     analyser   = audioCtx.createAnalyser();
     analyser.fftSize = 64;
     src.connect(analyser);
@@ -12456,6 +12458,24 @@ console.log('%c✦ Sandos Royal — Premium Mobile Build ✦', 'color:#d4899f;fo
     border-radius: 99px;
   }
 }
+
+/* ── Opening lyrics block ── */
+.opening-lyrics {
+  max-width: 900px;
+  margin: 2.2rem auto 0;
+  padding: 0 1rem;
+}
+.opening-lyrics-card {
+  background: linear-gradient(135deg, rgba(32,14,24,0.92), rgba(18,9,16,0.95));
+  border: 1px solid rgba(228,190,128,0.2);
+  border-radius: 24px;
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+}
+.opening-lyrics-badge { color: var(--gold-bright); letter-spacing: 2px; font-size: .75rem; }
+.opening-lyrics-title { margin: .5rem 0 .8rem; color: var(--rose-pearl); font-size: 1.1rem; }
+.opening-lyrics-line { color: rgba(237,208,218,0.92); line-height: 1.9; }
 
 /* ════════════════════════════════════════════════════════════════
    ✦ NEW SECTION: SONG LYRICS DISPLAY  — كلام الأغنية
