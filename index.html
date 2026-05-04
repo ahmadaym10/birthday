@@ -12485,6 +12485,25 @@ console.log('%c✦ Sandos Royal — Premium Mobile Build ✦', 'color:#d4899f;fo
 @media (max-width: 480px) {
   .song-card { padding: 2rem 1.4rem; border-radius: 24px; }
 }
+.song-embed-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 18px 42px rgba(0,0,0,0.45);
+  position: relative;
+  z-index: 1;
+}
+.song-embed-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 .song-now-playing {
   display: inline-flex;
   align-items: center;
@@ -13322,7 +13341,9 @@ button, [role="button"] { cursor: pointer; }
     <div class="song-message">
       <p class="song-message-text">نسخة YouTube المضافة بدل الأغنية القديمة:</p>
     </div>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/47X9Tf92Ucs?si=Iqx2G0IiXSCFXG9T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div class="song-embed-wrap">
+      <iframe src="https://www.youtube.com/embed/47X9Tf92Ucs?si=Iqx2G0IiXSCFXG9T" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
   </div>
 </div>
 
